@@ -6,11 +6,10 @@ application:
   upstreams:
     - location: /
       backend: http://gonic:80/
-
 services:
   gonic:
     # upstream: docker.io/sentriz/gonic:v0.23.0
-    image: docker.1ms.run/sentriz/gonic:v0.23.0@sha256:7b2298d905149ecb7e57cdd3bf7a40082758b9bda2e24454b41c17c99bf25e8f
+    image: docker.1ms.run/sentriz/gonic:v0.23.0
     environment:
       - TZ=Asia/Shanghai
       # Scan the music library once at startup and then on filesystem changes.
@@ -34,14 +33,12 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
-
 ext_config:
   enable_media_access: true
   enable_document_access: true
   permissions:
     - PERM_MEDIA_MOUNT_SHARED
-
-usage: |
+usage: |-
   Gonic 是一个自托管音乐流媒体服务器，实现了 Subsonic API，可配合 Symfonium、DSUB、Ultrasonic、
   Amperfy、Strawberry 等客户端使用，也自带 Web 管理界面。
 
