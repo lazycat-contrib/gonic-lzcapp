@@ -1,0 +1,41 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/application.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: gonic
+
+build:
+  toolchains: []
+  run_buildscript: false
+
+images:
+  # Upstream tags every release as vX.Y.Z (plus commit-SHA aliases).
+  - id: gonic
+    target: service
+    service: gonic
+    source: docker.io/sentriz/gonic
+    channel: stable
+    sort: semver
+    tag_regex: '^v[0-9]+\.[0-9]+\.[0-9]+$'
+    delivery:
+      mode: mirror
+      require_digest_match: true
+
+stores:
+  official:
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: Gonic
+    summary: "自托管音乐流媒体服务器，实现 Subsonic API"

@@ -1,0 +1,22 @@
+package: community.lazycat.app.gonic
+version: 0.23.0
+name: Gonic
+description: "Self-hosted music streaming server implementing the Subsonic API"
+author: sentriz
+license: GPL-3.0
+homepage: https://github.com/sentriz/gonic
+min_os_version: 1.5.0
+
+permissions:
+  required:
+    - net.internet
+    - document.read
+    - document.private
+
+locales:
+  zh:
+    name: Gonic
+    description: "自托管音乐流媒体服务器，实现 Subsonic API，可配合 Symfonium、DSUB、Ultrasonic、Amperfy 等客户端使用；支持标签浏览、在线转码、播客与播放列表"
+  en:
+    name: Gonic
+    description: "Self-hosted music streaming server implementing the Subsonic API, usable with clients like Symfonium, DSub, Ultrasonic and Amperfy; supports tag-based browsing, on-the-fly transcoding, podcasts and playlists"

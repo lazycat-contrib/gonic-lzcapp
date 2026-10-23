@@ -1,0 +1,60 @@
+application:
+  subdomain: gonic
+  multi_instance: true
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://gonic:80/
+
+services:
+  gonic:
+    # upstream: docker.io/sentriz/gonic:v0.23.0
+    image: docker.1ms.run/sentriz/gonic:v0.23.0@sha256:7b2298d905149ecb7e57cdd3bf7a40082758b9bda2e24454b41c17c99bf25e8f
+    environment:
+      - TZ=Asia/Shanghai
+      # Scan the music library once at startup and then on filesystem changes.
+      - GONIC_SCAN_AT_START_ENABLED=true
+      - GONIC_SCAN_WATCHER_ENABLED=true
+      - GONIC_SCAN_INTERVAL=10
+    binds:
+      # Database, settings and users.
+      - /lzcapp/var/data:/data
+      # Transcode cache, cover art and other regenerable data.
+      - /lzcapp/var/cache:/cache
+      # Shared home folders holding the actual media, mounted read-only.
+      - /lzcapp/run/mnt/home/{{ .U.music_dir }}:/music:ro
+      - /lzcapp/run/mnt/home/{{ .U.podcast_dir }}:/podcasts:ro
+      - /lzcapp/run/mnt/home/{{ .U.playlists_dir }}:/playlists
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget -q -O /dev/null http://127.0.0.1:80/admin/login
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+ext_config:
+  enable_media_access: true
+  enable_document_access: true
+  permissions:
+    - PERM_MEDIA_MOUNT_SHARED
+
+usage: |
+  Gonic 是一个自托管音乐流媒体服务器，实现了 Subsonic API，可配合 Symfonium、DSUB、Ultrasonic、
+  Amperfy、Strawberry 等客户端使用，也自带 Web 管理界面。
+
+  登录：默认账号 admin / admin，登录后请立刻在设置中修改密码。
+
+  音乐库：
+  安装时设置的「音乐库目录」等参数指的是共享主目录（home）下的文件夹名，默认 Music。
+  请先把音乐文件放到该目录，再在管理界面里执行扫描。Gonic 支持按文件夹或按标签浏览，
+  并可在线转码成浏览器与客户端支持的格式。
+
+  客户端接入：在客户端中填写本应用的访问地址与账号密码即可（Subsonic 客户端通常需要
+  以 http:// 开头填写完整地址）。
+
+  数据：
+  - 音乐库、播客与播放列表直接存放在共享主目录中，本应用以只读方式挂载，不会修改你的媒体文件；
+  - 数据库与配置保存在应用数据目录，转码缓存可随时删除。

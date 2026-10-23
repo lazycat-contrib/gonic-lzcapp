@@ -1,0 +1,30 @@
+params:
+  - id: music_dir
+    type: string
+    name: "Music Library Directory"
+    description: "Folder name of your music library inside the shared home directory"
+    default_value: "Music"
+
+  - id: podcast_dir
+    type: string
+    name: "Podcast Directory"
+    description: "Folder name for downloaded podcast episodes inside the shared home directory"
+    default_value: "Podcasts"
+
+  - id: playlists_dir
+    type: string
+    name: "Playlists Directory"
+    description: "Folder name for m3u playlists inside the shared home directory"
+    default_value: "Playlists"
+
+locales:
+  zh:
+    music_dir:
+      name: "音乐库目录"
+      description: "共享主目录下的音乐库文件夹名"
+    podcast_dir:
+      name: "播客目录"
+      description: "共享主目录下存放播客节目的文件夹名"
+    playlists_dir:
+      name: "播放列表目录"
+      description: "共享主目录下存放 m3u 播放列表的文件夹名"
